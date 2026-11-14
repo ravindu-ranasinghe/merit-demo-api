@@ -68,9 +68,9 @@ app.patch("/projects/:id", { preHandler: authenticate }, async (req, reply) => {
   return project;
 });
 
-app.delete("/projects/:id", async (req, reply) => {
-  const project = projects.get(req.params.id);
-  if (!project) return reply.code(404).send({ error: "not_found" });
+app.delete("/projects/:id", { preHandler: authenticate }, async (req, reply) => {
+  const project = loadOwnedProject(req, reply);
+  if (!project) return reply;
   for (const task of tasks.values()) {
     if (task.projectId === project.id) tasks.delete(task.id);
   }
