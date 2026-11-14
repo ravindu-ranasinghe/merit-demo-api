@@ -30,5 +30,6 @@ curl -H 'authorization: Bearer alice-token' localhost:3000/projects
 | POST   | `/projects`               | create a project                   |
 | GET    | `/projects/:id`           | owner only                         |
 | PATCH  | `/projects/:id`           | owner only; rename or archive      |
+| DELETE | `/projects/:id`           | removes the project and its tasks  |
 | GET    | `/projects/:id/tasks`     | owner only                         |
 | POST   | `/projects/:id/tasks`     | owner only                         |
