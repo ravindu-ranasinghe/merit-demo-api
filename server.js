@@ -68,6 +68,16 @@ app.patch("/projects/:id", { preHandler: authenticate }, async (req, reply) => {
   return project;
 });
 
+app.delete("/projects/:id", { preHandler: authenticate }, async (req, reply) => {
+  const project = loadOwnedProject(req, reply);
+  if (!project) return reply;
+  for (const task of tasks.values()) {
+    if (task.projectId === project.id) tasks.delete(task.id);
+  }
+  projects.delete(project.id);
+  return reply.code(204).send();
+});
+
 app.get("/projects/:id/tasks", { preHandler: authenticate }, async (req, reply) => {
   const project = loadOwnedProject(req, reply);
   if (!project) return reply;
