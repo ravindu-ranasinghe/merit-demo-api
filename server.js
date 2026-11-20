@@ -42,7 +42,9 @@ function loadOwnedProject(req, reply) {
 app.get("/health", async () => ({ ok: true }));
 
 app.get("/projects", { preHandler: authenticate }, async (req) => {
-  return [...projects.values()].filter((p) => p.ownerId === req.user.id);
+  // Archived projects are hidden unless the caller asks for them with ?includeArchived=true.
+  const includeArchived = Boolean(req.query.includeArchived);
+  return [...projects.values()].filter((p) => p.ownerId === req.user.id && (includeArchived || !p.archived));
 });
 
 app.post("/projects", { preHandler: authenticate }, async (req, reply) => {
